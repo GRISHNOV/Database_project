@@ -6,6 +6,7 @@
 #include <sys/types.h>
 #include <unistd.h>
 #include <string.h>
+#include <time.h>
 
 #define DB_NAME "test.db"
 #define DB_WORK_SPACE "db_work_dir"
@@ -114,6 +115,11 @@ int main(int argc, char *argv[], char *envp[])
 
     printf("\n_____ЗАПУСК ПРОГРАММЫ_____\n\n");
 
+    clock_t start_time_point, end_time_point;
+    double elapsed_CPU_time;
+
+    start_time_point = clock();
+
     //(void)file_exists(BD_NAME);
     if (dir_exists(DB_WORK_SPACE) == DIR_NOT_EXIST)
     {
@@ -179,7 +185,7 @@ int main(int argc, char *argv[], char *envp[])
     else
     {
         printf("Успешное открытие базы данных с именем %s\n\n", DB_NAME);
-        printf("$$$ SQLITE_VERSION = %s $$$\n",SQLITE_VERSION);
+        printf("$$$ SQLITE_VERSION = %s $$$\n", SQLITE_VERSION);
     }
 
     printf("Введите команду длиной не более  MAX_SRTING_LEN_FROM_USER символов:\n");
@@ -206,6 +212,10 @@ int main(int argc, char *argv[], char *envp[])
 
     sqlite3_close(db);
     free(user_input);
+
+    end_time_point = clock();
+    elapsed_CPU_time = ((double)(end_time_point - start_time_point)) / CLOCKS_PER_SEC;
+    printf("\n @@@ Затраченное процессорное время: %f @@@\n", elapsed_CPU_time);
 
     printf("\n_____ЗАВЕРШЕНИЕ ПРОГРАММЫ_____\n\n");
     return 0;
