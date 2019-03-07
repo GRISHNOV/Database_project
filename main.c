@@ -8,6 +8,9 @@
 #include <string.h>
 #include <time.h>
 
+#include "existence_check_module.h"
+#include "user_input_processing_module.h"
+
 #define DB_NAME "test.db"
 #define DB_WORK_SPACE "db_work_dir"
 
@@ -33,7 +36,7 @@
 	}
 }*/
 
-int file_exists(char *file_path)
+/*int file_exists(char *file_path)
 {
     if (access(file_path, 0) == 0)
     {
@@ -59,9 +62,9 @@ int dir_exists(char *dir_path)
         printf("Внимание! Директория %s не существует\n", dir_path);
         return DIR_NOT_EXIST;
     }
-}
+}*/
 
-char *get_string_from_user(int max_len)
+/*char *get_string_from_user(int max_len)
 {
     char *data = (char *)malloc(MAX_SRTING_LEN_FROM_USER + 1);
     char buffer;
@@ -85,7 +88,7 @@ char *get_string_from_user(int max_len)
     //free(data);
 
     return data;
-}
+}*/
 
 /*static int callback(void *data, int argc, char **argv, char **azColName)
 {
@@ -172,7 +175,7 @@ int main(int argc, char *argv[], char *envp[])
     int open_result;
     char *user_input = NULL;
     int operation_result;
-    char *sql_command;
+    //char *sql_command;
     //const char *data = "Callback function called";
 
     open_result = sqlite3_open(DB_WORK_SPACE "/" DB_NAME, &db);

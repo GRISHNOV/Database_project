@@ -1,0 +1,1 @@
+char *get_string_from_user(int max_len);
