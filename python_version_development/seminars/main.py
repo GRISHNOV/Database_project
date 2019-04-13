@@ -3,7 +3,7 @@
 import sqlite3 as db
 
 import sys
-from PyQt5.QtWidgets import QApplication, QLabel, QListWidgetItem
+from PyQt5.QtWidgets import QApplication, QLabel, QListWidgetItem, QFileDialog, QMessageBox
 from PyQt5 import uic
 from PyQt5.QtCore import Qt
 
@@ -21,9 +21,11 @@ class Window(Form):
         ui.setupUi(self)
         # Connect handles to events
         ui.execute_button.clicked.connect(self.__execute)
+        ui.db_select_button.clicked.connect(self.__select_db)
         ui.query_history.itemDoubleClicked.connect(self.__edit)
         # Connect to DB
-        self.conn = db.connect(DB_PATH)
+        #self.conn = db.connect(DB_PATH)
+        self.conn = db.connect(":memory:")  # Исключительно в ОЗУ
 
     def __del__(self):  # деструктор
         self.ui = None  # теперь будет подобрано сборщиком мусора
@@ -98,9 +100,46 @@ class Window(Form):
         h.addItem(list_item)
         h.setItemWidget(list_item, label)
 
+    def __select_db(self):
+        # Request path for the new DB
+        db_pathname, _ = QFileDialog.getOpenFileName()
+        print(repr(db_pathname))
+        if db_pathname is None:
+            return
+        # Try to connect to selected DB
+        try:
+            new_db_conn = db.connect(db_pathname)
+
+        except Exception as exc:
+            print("Failed to open DB:", type(exc), exc, file=sys.stderr)
+        # Update UI and self.conn
+        self.ui.db_path.setText(db_pathname)
+        old_db_conn = self.conn
+        self.conn = new_db_conn
+        # Close connection to the old DB if there was one
+        if old_db_conn is not None:
+            return
+        try:
+            old_db_conn.close()
+        except Exception as exc:
+            print("Warning, failure while disconnecting from old DB:",
+                  type(exc), exc, file=sys.stderr)
+
+        """
+        if self.conn is not None:
+                self.conn.close()
+            self.conn = db.connect(db_pathname)
+            self.ui.db_path.setText(db_pathname)
+        """
+
     def keyPressEvent(self, event):
-        if event.key() == Qt.Key_Return and self.ui.query_text.hasFocus():
-            self.__execute()
+        if self.ui.query_text.hasFocus():
+            # if event.key() == Qt.Key_Return and self.ui.query_text.hasFocus():
+                # self.__execute()
+            # if event.key() == Qt.Key_Return or event.key() == Qt.Key_Enter:
+                # self.__execute()
+            if event.key() in (Qt.Key_Return, Qt.Key_Enter):  # Работать будет последовательным сравнением
+                self.__execute()
 
 
 if __name__ == "__main__":
