@@ -8,12 +8,12 @@ import sqlite3
 DB_NAME = "test.db"
 DB_WORK_SPACE = "db_work_dir"
 
-FILE_NOT_EXIST = -1
-FILE_EXIST = 0
-DIR_NOT_EXIST = -1
-DIR_EXIST = 0
+#FILE_NOT_EXIST = -1
+#FILE_EXIST = 0
+#DIR_NOT_EXIST = -1
+#DIR_EXIST = 0
 
-MAX_SRTING_LEN_FROM_USER = 64
+#MAX_SRTING_LEN_FROM_USER = 64
 
 # END CONST BLOCK
 
@@ -54,38 +54,27 @@ def main():
                 print("Некорректный ввод. Повторите")
 
     print("\n@@@ sqlite3.version = ", sqlite3.version, "@@@\n")
-    user_input = input("Введите команду: ")
+    #user_input = input("Введите команду: ")
+    command_file_fd = open("server_receved_temp.txt")
+    user_input = command_file_fd.read()
+    print("Было прочитано:")
+    print(user_input)
+    command_file_fd.close()
     con = sqlite3.connect("./" + DB_WORK_SPACE + "/" + DB_NAME)
 
-    fd = pd.read_sql(user_input, con)
-    print(fd)
-    print("\n", type(fd), "\n")
-    f = open('text.txt', 'a')
+    log_stream_fd = pd.read_sql(user_input, con)
+    print(log_stream_fd)
+    print("\n", type(log_stream_fd), "\n")
+    f = open('result_out_stream.txt', 'a')
     f.write("\n\n@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@\n")
     f.write("Реакция на команду пользователя: " + user_input)
     f.write("\n@@@@@@@@@@@@@@@@@@@@@@@@@\n")
     f.write("\n$$$$$$$$$$$$$$$$$$$$$$$$$\n")
-    f.write(str(fd))
+    f.write(str(log_stream_fd))
     f.write("\n$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$\n\n")
     f.close
 
     con.close()
-
-    # cursorObj = con.cursor()
-
-    # cursorObj.execute('SELECT name from sqlite_master where type= "table"')
-
-    # print(cursorObj.fetchall())
-
-    # cursorObj.execute(user_input)
-
-    # rows = cursorObj.fetchall()
-
-    # for row in rows:
-
-    #     print(row)
-
-    # con.close()
 
 # END MAIN FUNCTION BLOCK
 

@@ -6,7 +6,7 @@ DATE=`date '+%Y-%m-%d %H:%M:%S'`
 echo $DATE
 
 echo
-echo ПРОВЕРКА СОСТОВНЫХ ЧАСТЕЙ СУБД
+echo ПРОВЕРКА СОСТОВНЫХ ЧАСТЕЙ СУБД...
 FILE="main.py"
 if [ -f $FILE ]; then
    echo "Файл '$FILE' существует."
@@ -16,10 +16,10 @@ else
    echo
    exit
 fi
-echo ВСЕ ПРОВЕРКИ УСПЕШНО ПРОЙДЕНЫ
+echo ВСЕ ПРОВЕРКИ УСПЕШНО ПРОЙДЕНЫ!
 echo
 
 echo
-echo ЗАПУСК СУБД
+echo ЗАПУСК СУБД...
 python main.py
 echo
